@@ -42,6 +42,18 @@ public class TestGemFireTemplate
 		
 		System.out.println(emp.toString());
 		
+		System.out.println("\n-> template.find() test \n ");
+		
+		SelectResults<Employee> clerkEmpResults = 
+				empTemplate.find("SELECT * from /employees WHERE job=$1", "CLERK");
+		
+		Collection<Employee> clerkEmps = (Collection<Employee>) clerkEmpResults.asList();
+		
+		for (Employee e: clerkEmps)
+		{
+			System.out.println(e.toString());
+		}
+		
 	}
 	
 	public static void main(String[] args) 
