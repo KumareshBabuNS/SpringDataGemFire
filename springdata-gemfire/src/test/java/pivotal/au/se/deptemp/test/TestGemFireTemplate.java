@@ -1,7 +1,15 @@
 package pivotal.au.se.deptemp.test;
 
+import java.util.Collection;
+
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.gemfire.GemfireTemplate;
+
+import pivotal.au.se.deptemp.beans.Employee;
+
+import com.gemstone.gemfire.cache.Region;
+import com.gemstone.gemfire.cache.query.SelectResults;
 
 public class TestGemFireTemplate 
 {
@@ -15,6 +23,24 @@ public class TestGemFireTemplate
 
 	public void run ()
 	{
+		@SuppressWarnings("unchecked")
+		GemfireTemplate empTemplate = new GemfireTemplate((Region) ctx.getBean("employees"));
+		
+		System.out.println("-> template.query() test \n ");
+		
+		SelectResults<?> results = empTemplate.query("deptno = 40");
+		Collection<Employee> emps = (Collection<Employee>) results.asList();
+		
+		for (Employee e: emps)
+		{
+			System.out.println(e.toString());
+		}
+		
+		System.out.println("\n-> template.get(key) test \n ");
+		
+		Employee emp = empTemplate.get("7373");
+		
+		System.out.println(emp.toString());
 		
 	}
 	
@@ -22,7 +48,7 @@ public class TestGemFireTemplate
 	{
 		// TODO Auto-generated method stub
 		TestGemFireTemplate test = new TestGemFireTemplate();
-		System.out.println("\nStarting Spring Data GemFire Template Test.... ");
+		System.out.println("\nStarting Spring Data GemFire Template Test.... \n");
 		test.run();
 		System.out.println("\nAll done.... ");
 		
